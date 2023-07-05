@@ -12,8 +12,9 @@ struct ContentView: View {
     let possibleMoves: [String] = ["✊", "✋", "✌️"]
     
     @State private var cpuChoice = Int.random(in: 0..<3)
-    @State var shouldWin: Bool = Bool.random()
-    @State var playerScore: Int = 0
+    @State private var shouldWin: Bool = Bool.random()
+    @State private var playerScore: Int = 0
+    @State private var round: Int = 0
     
     var body: some View {
         VStack (spacing: 40) {
@@ -50,17 +51,34 @@ struct ContentView: View {
     }
     
     func playerMove(_ move: String) {
-        // Logic here needs to be adjusted to the actual game mechanic
-        if move == possibleMoves[cpuChoice] && shouldWin {
-            playerScore += 1
-        } else if move != possibleMoves[cpuChoice] && !shouldWin {
-            playerScore += 1
+        
+        if shouldWin {
+            
+            if possibleMoves[cpuChoice] == "✊" && move == "✋" {
+                playerScore += 1
+            } else if possibleMoves[cpuChoice] == "✋" && move == "✌️" {
+                playerScore += 1
+            } else if possibleMoves[cpuChoice] == "✌️" && move == "✊" {
+                playerScore += 1
+            } else {
+                playerScore -= 1
+            }
+            
         } else {
-            print("Nothing")
+            if possibleMoves[cpuChoice] == "✊" && move != "✋" {
+                playerScore += 1
+            } else if possibleMoves[cpuChoice] == "✋" && move != "✌️" {
+                playerScore += 1
+            } else if possibleMoves[cpuChoice] == "✌️" && move != "✊" {
+                playerScore += 1
+            } else {
+                playerScore -= 1
+            }
         }
         
         cpuChoice = Int.random(in: 0..<3)
         shouldWin = Bool.random()
+        round += 1
         
     }
     
