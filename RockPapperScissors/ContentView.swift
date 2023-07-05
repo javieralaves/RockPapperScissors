@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var shouldWin: Bool = Bool.random()
     @State private var playerScore: Int = 0
     @State private var round: Int = 0
+    @State private var gameOver: Bool = false
     
     var body: some View {
         VStack (spacing: 40) {
@@ -47,7 +48,24 @@ struct ContentView: View {
                 }
             }
         }
+        .alert("Game over", isPresented: $gameOver) {
+            Button("Continue", action: newGame)
+        } message: {
+            Text("Time for a new game!")
+        }
         .padding()
+    }
+    
+    func nextRound() {
+        cpuChoice = Int.random(in: 0..<3)
+        shouldWin = Bool.random()
+        round += 1
+        
+        if round == 11 {
+            gameOver = true
+        } else {
+            gameOver = false
+        }
     }
     
     func playerMove(_ move: String) {
@@ -76,10 +94,15 @@ struct ContentView: View {
             }
         }
         
+        nextRound()
+        
+    }
+    
+    func newGame() {
+        playerScore = 0
+        round = 0
         cpuChoice = Int.random(in: 0..<3)
         shouldWin = Bool.random()
-        round += 1
-        
     }
     
 }
